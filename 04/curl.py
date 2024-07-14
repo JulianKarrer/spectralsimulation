@@ -12,7 +12,7 @@ fft = FFT(nb_grid_pts, engine='pfft', communicator=MPI.COMM_WORLD)
 dim = 3
 
 
-def curl(u_cxyz):
+def curl_fourier(u_cxyz):
     """Computes the curl of a vector field in real space."""
     u_hat_c_xyz = fft.fourier_space_field('u_c hat', dim)
     fft.fft(u_cxyz, u_hat_c_xyz)
@@ -36,7 +36,7 @@ def curl(u_cxyz):
 
 # assert that curl vanishes for constant field
 u_cxyz = np.ones([3, *fft.nb_subdomain_grid_pts])
-curlu_cxyz = curl(u_cxyz)
+curlu_cxyz = curl_fourier(u_cxyz)
 np.testing.assert_allclose(curlu_cxyz, 0)
 
 
@@ -46,7 +46,7 @@ translated_coords = (fft.coords - 0.5)
 u_cxyz = np.cross(norm, translated_coords, axis=0)
 np.testing.assert_allclose(u_cxyz[2, :, :, 0], 0)
 
-curlu_cxyz = curl(u_cxyz)
+curlu_cxyz = curl_fourier(u_cxyz)
 # assert that curl only has z component
 np.testing.assert_allclose(curlu_cxyz[0, :, :, 0], 0)
 np.testing.assert_allclose(curlu_cxyz[1, :, :, 0], 0)
