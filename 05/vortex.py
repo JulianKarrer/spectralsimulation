@@ -3,7 +3,6 @@ import numpy as np
 from muFFT import FFT
 import matplotlib.pyplot as plt
 from mpi4py import MPI
-from scipy.integrate import solve_ivp
 
 
 # mpirun -np 4 python3 vortex.py
